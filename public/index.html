@@ -1,1 +1,981 @@
-TEST_PASTE_MARKER_XYZ
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Guess the Guest of Honor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple: #4C1D7A;
+    --purple-deep: #2C0F49;
+    --lime: #C6F135;
+    --ink: #1A1025;
+    --cream: #FBF8F1;
+    --pink: #FF5FA2;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: var(--purple-deep);
+    background-image:
+      radial-gradient(circle at 10% 10%, rgba(198,241,53,0.15), transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(255,95,162,0.15), transparent 40%);
+    color: var(--cream);
+    min-height: 100vh;
+  }
+  .wrap {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  h1, h2, h3 { font-family: 'Baloo 2', sans-serif; margin: 0; }
+  .brand {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .brand .eyebrow {
+    display: inline-block;
+    background: var(--lime);
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  .brand h1 {
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--cream);
+  }
+  .brand h1 span { color: var(--lime); }
+  .brand p {
+    margin-top: 8px;
+    color: rgba(251,248,241,0.7);
+    font-size: 14px;
+  }
+  .card {
+    background: var(--cream);
+    color: var(--ink);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+    margin-bottom: 16px;
+  }
+  .role-grid {
+    display: grid;
+    gap: 12px;
+  }
+  .role-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--purple);
+    color: var(--cream);
+    border: none;
+    border-radius: 16px;
+    padding: 18px 18px;
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: left;
+    transition: transform 0.12s ease, background 0.12s ease;
+  }
+  .role-btn:hover { transform: translateY(-2px); background: #5D2A96; }
+  .role-btn .emoji { font-size: 26px; }
+  .role-btn small {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 12.5px;
+    color: rgba(251,248,241,0.75);
+    margin-top: 2px;
+  }
+  label {
+    display: block;
+    font-weight: 600;
+    font-size: 13px;
+    margin: 14px 0 6px;
+    color: var(--purple-deep);
+  }
+  input[type=text], input[type=password], input[type=number] {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 2px solid #E4DCC8;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    background: #fff;
+  }
+  textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 2px solid #E4DCC8;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    background: #fff;
+    resize: vertical;
+    min-height: 90px;
+  }
+  input:focus, textarea:focus { outline: 3px solid var(--lime); border-color: var(--purple); }
+  .btn {
+    display: inline-block;
+    width: 100%;
+    margin-top: 18px;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: var(--ink);
+    color: var(--lime);
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    cursor: pointer;
+  }
+  .btn:hover { background: #000; }
+  .btn.secondary {
+    background: transparent;
+    color: var(--purple);
+    border: 2px solid var(--purple);
+  }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .back-link {
+    display: inline-block;
+    margin-bottom: 14px;
+    color: var(--lime);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .ticket {
+    background: var(--purple);
+    color: var(--cream);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    margin: 16px 0;
+    border: 2px dashed var(--lime);
+  }
+  .ticket .code {
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--lime);
+  }
+  .ticket .label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(251,248,241,0.7);
+  }
+  .q-item { margin-bottom: 14px; }
+  .q-item .qnum {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--pink);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 12px 14px;
+    margin-top: 8px;
+    border-radius: 10px;
+    border: 2px solid #E4DCC8;
+    background: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+  }
+  .option.selected { border-color: var(--purple); background: #F1E9FF; }
+  .leaderboard-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #E4DCC8;
+    font-weight: 600;
+  }
+  .leaderboard-row:last-child { border-bottom: none; }
+  .leaderboard-row .rank {
+    color: var(--pink);
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 800;
+    margin-right: 10px;
+  }
+  .msg { font-size: 13.5px; margin-top: 10px; }
+  .msg.error { color: #C0392B; font-weight: 600; }
+  .msg.ok { color: #1E8E4D; font-weight: 600; }
+  .hidden { display: none !important; }
+  .muted { color: rgba(26,16,37,0.55); font-size: 13px; }
+  .footer-note {
+    text-align: center;
+    font-size: 12px;
+    color: rgba(251,248,241,0.5);
+    margin-top: 20px;
+  }
+
+  /* Photo uploader */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .photo-slot {
+    aspect-ratio: 1;
+    border: 2px dashed #E4DCC8;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+    background: #fff;
+    position: relative;
+  }
+  .photo-slot img { width: 100%; height: 100%; object-fit: cover; }
+  .photo-slot .plus { font-size: 22px; color: #C8BFA8; }
+  .photo-slot .remove {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  /* Slideshow */
+  .slideshow {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--ink);
+    aspect-ratio: 4/3;
+    margin: 16px 0;
+  }
+  .slideshow img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .slideshow .caption {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+    color: #fff;
+    padding: 20px 16px 14px;
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    text-align: center;
+  }
+  .slideshow .dots {
+    position: absolute;
+    top: 10px; left: 0; right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+  }
+  .slideshow .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+  }
+  .slideshow .dot.active { background: #fff; }
+
+  /* Winner popup */
+  .winner-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,16,37,0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+  }
+  .winner-card {
+    background: var(--cream);
+    color: var(--ink);
+    border-radius: 20px;
+    padding: 32px 24px;
+    text-align: center;
+    max-width: 340px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .winner-card .trophy { font-size: 52px; }
+  .winner-card h2 {
+    margin-top: 10px;
+    font-size: 26px;
+    color: var(--purple-deep);
+  }
+  .winner-card p { margin-top: 8px; color: rgba(26,16,37,0.65); font-size: 14px; }
+
+  /* Donation section */
+  .donate-note {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--purple-deep);
+    margin-bottom: 14px;
+  }
+  .qr-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .qr-item { text-align: center; }
+  .qr-item img {
+    width: 100%;
+    border-radius: 10px;
+    border: 2px solid #E4DCC8;
+    background: #fff;
+  }
+  .qr-item span {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--purple-deep);
+  }
+  .testimonial-list { margin-top: 10px; }
+  .testimonial-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #E4DCC8;
+    font-size: 13.5px;
+  }
+  .testimonial-item:last-child { border-bottom: none; }
+  .testimonial-item .who {
+    font-weight: 700;
+    color: var(--purple-deep);
+    margin-bottom: 2px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <span class="eyebrow">Party Trivia</span>
+    <h1>Guess the <span>Guest of Honor</span></h1>
+    <p>Ten weird, wonderful questions. One guest of honor. Everyone else guesses.</p>
+  </div>
+
+  <!-- ROLE SELECT -->
+  <div id="view-role" class="card">
+    <div class="role-grid">
+      <button class="role-btn" onclick="showView('owner-create')">
+        <span class="emoji">🎉</span>
+        <span>Host<small>Set up a new game and write the questions</small></span>
+      </button>
+      <button class="role-btn" onclick="showView('subject-login')">
+        <span class="emoji">⭐</span>
+        <span>Guest of Honor<small>Answer the questions about yourself</small></span>
+      </button>
+      <button class="role-btn" onclick="showView('player-join')">
+        <span class="emoji">🙋</span>
+        <span>Player<small>Guess how the guest of honor answered</small></span>
+      </button>
+    </div>
+    <p class="muted" style="text-align:center;margin-top:14px;">
+      Already hosting a game? <a href="#" onclick="showView('owner-login');return false;" style="color:var(--purple);font-weight:600;">Log back in</a>
+    </p>
+  </div>
+
+  <!-- OWNER: CREATE -->
+  <div id="view-owner-create" class="card hidden">
+    <a class="back-link" onclick="showView('role')">&larr; back</a>
+    <h2>Set up your game</h2>
+    <p class="muted">Write 10 fun questions for the guest of honor. Keep them personal and a little weird.</p>
+    <label>Your name (host)</label>
+    <input type="text" id="oc-name" placeholder="e.g. Corena" />
+    <label>Set a host password</label>
+    <input type="password" id="oc-pass" placeholder="Something you'll remember" />
+    <label>Guest of honor's name</label>
+    <input type="text" id="oc-subject-name" placeholder="e.g. Jamie" />
+    <div id="oc-questions"></div>
+    <button class="btn secondary" style="margin-top:12px;" onclick="addQuestionField()">+ Add another question field</button>
+    <button class="btn" onclick="createGame()">Create game</button>
+    <div id="oc-msg" class="msg"></div>
+  </div>
+
+  <!-- OWNER: DASHBOARD -->
+  <div id="view-owner-dash" class="card hidden">
+    <a class="back-link" onclick="showView('role')">&larr; back</a>
+    <h2 id="od-title">Host dashboard</h2>
+    <div class="ticket">
+      <div class="label">Game code — give to players</div>
+      <div class="code" id="od-gamecode">------</div>
+    </div>
+    <div class="ticket" id="od-subject-ticket">
+      <div class="label">Guest of honor password</div>
+      <div class="code" id="od-subjectpass">----</div>
+    </div>
+    <div id="od-status" class="msg"></div>
+
+    <h3 style="margin-top:18px;">Slideshow photos</h3>
+    <p class="muted">Add up to 5 photos and a caption. Players will see this after they finish their guesses.</p>
+    <div class="photo-grid" id="od-photo-grid"></div>
+    <input type="file" id="od-photo-input" accept="image/*" class="hidden" multiple />
+    <label>Slideshow caption</label>
+    <input type="text" id="od-slideshow-text" placeholder="e.g. Happy Birthday!" maxlength="80" />
+    <button class="btn secondary" style="margin-top:12px;" onclick="savePhotos()">Save photos & caption</button>
+    <div id="od-photo-msg" class="msg"></div>
+
+    <h3 style="margin-top:18px;">Leaderboard</h3>
+    <div id="od-leaderboard"><p class="muted">No players yet.</p></div>
+    <button class="btn secondary" onclick="refreshOwnerDash()">Refresh</button>
+
+    <h3 style="margin-top:18px;">Testimonials</h3>
+    <div id="od-testimonials"><p class="muted">No notes yet.</p></div>
+  </div>
+
+  <!-- OWNER: LOGIN (returning to dashboard) -->
+  <div id="view-owner-login" class="card hidden">
+    <a class="back-link" onclick="showView('role')">&larr; back</a>
+    <h2>Host login</h2>
+    <label>Game code</label>
+    <input type="text" id="ol-code" placeholder="6-character code" />
+    <label>Host password</label>
+    <input type="password" id="ol-pass" />
+    <button class="btn" onclick="ownerLogin()">View dashboard</button>
+    <div id="ol-msg" class="msg"></div>
+  </div>
+
+  <!-- SUBJECT LOGIN -->
+  <div id="view-subject-login" class="card hidden">
+    <a class="back-link" onclick="showView('role')">&larr; back</a>
+    <h2>Guest of honor login</h2>
+    <label>Game code</label>
+    <input type="text" id="sl-code" placeholder="6-character code from your host" />
+    <label>Your password</label>
+    <input type="password" id="sl-pass" placeholder="Given to you by the host" />
+    <button class="btn" onclick="subjectLogin()">Start answering</button>
+    <div id="sl-msg" class="msg"></div>
+  </div>
+
+  <!-- SUBJECT ANSWER -->
+  <div id="view-subject-answer" class="card hidden">
+    <h2>Answer honestly (or hilariously)</h2>
+    <p class="muted">Everyone else will try to guess these.</p>
+    <div id="sa-questions"></div>
+    <button class="btn" onclick="submitSubjectAnswers()">Submit my answers</button>
+    <div id="sa-msg" class="msg"></div>
+  </div>
+
+  <!-- PLAYER JOIN -->
+  <div id="view-player-join" class="card hidden">
+    <a class="back-link" onclick="showView('role')">&larr; back</a>
+    <h2>Join the game</h2>
+    <label>Game code</label>
+    <input type="text" id="pj-code" placeholder="6-character code" />
+    <label>Your name</label>
+    <input type="text" id="pj-name" placeholder="So the host knows who's winning" />
+    <button class="btn" onclick="playerJoin()">Let's play</button>
+    <div id="pj-msg" class="msg"></div>
+  </div>
+
+  <!-- PLAYER QUIZ -->
+  <div id="view-player-quiz" class="card hidden">
+    <h2 id="pq-title">Guess away!</h2>
+    <div id="pq-questions"></div>
+    <button class="btn" onclick="submitPlayerAnswers()">Submit my guesses</button>
+    <div id="pq-msg" class="msg"></div>
+  </div>
+
+  <!-- PLAYER RESULT -->
+  <div id="view-player-result" class="card hidden">
+    <h2>Nice work!</h2>
+    <p id="pr-score" style="font-size:20px;font-weight:700;"></p>
+
+    <div id="pr-slideshow-wrap"></div>
+
+    <h3 style="margin-top:18px;">Leaderboard</h3>
+    <div id="pr-leaderboard"></div>
+    <button class="btn secondary" onclick="refreshPlayerLeaderboard()">Refresh leaderboard</button>
+
+    <button class="btn" style="margin-top:18px;" onclick="showView('thank-you')">Continue</button>
+  </div>
+
+  <!-- THANK YOU / TESTIMONIAL / DONATE -->
+  <div id="view-thank-you" class="card hidden">
+    <h2>Thanks for playing!</h2>
+    <p class="muted">Leave a quick note for the guest of honor, if you'd like.</p>
+    <label>Your note</label>
+    <textarea id="ty-note" placeholder="Say something nice (or ridiculous)..." maxlength="500"></textarea>
+    <button class="btn secondary" style="margin-top:12px;" onclick="submitTestimonial()">Send note</button>
+    <div id="ty-msg" class="msg"></div>
+
+    <h3 style="margin-top:20px;">Support the app</h3>
+    <p class="donate-note">This app is a labor of love (and a lot of coffee ☕). Tips welcome!</p>
+    <div class="qr-grid">
+      <div class="qr-item">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Fpaypal.me%2Fcostumecorena" alt="PayPal QR code" />
+        <span>PayPal</span>
+      </div>
+      <div class="qr-item">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Fvenmo.com%2Fu%2Fcorena-gibson" alt="Venmo QR code" />
+        <span>Venmo</span>
+      </div>
+      <div class="qr-item">
+        <img src="zelle-qr.jpg" alt="Zelle QR code" />
+        <span>Zelle</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">Free to play · no app download needed</div>
+</div>
+
+<!-- Winner popup (hidden by default) -->
+<div id="winner-overlay" class="winner-overlay hidden">
+  <div class="winner-card">
+    <div class="trophy">🎉🏆</div>
+    <h2>You're the winner!</h2>
+    <p id="winner-sub">You're currently in the lead. Nice work!</p>
+    <button class="btn" style="margin-top:14px;" onclick="closeWinnerPopup()">Nice!</button>
+  </div>
+</div>
+
+<script>
+const API = "/api/game";
+let state = {
+  gameCode: null,
+  subjectPassword: null,
+  ownerPassword: null,
+  questions: [],
+  subjectQuestions: [],
+  playerQuestions: [],
+  playerName: null,
+  quizStartTime: null,
+  ownerPhotos: [], // array of dataUrls, up to 5, for the host's photo grid while editing
+};
+
+function showView(name) {
+  document.querySelectorAll('[id^="view-"]').forEach(el => el.classList.add('hidden'));
+  document.getElementById('view-' + name).classList.remove('hidden');
+}
+
+async function api(action, payload) {
+  const res = await fetch(API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action, ...payload }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Something went wrong.');
+  return data;
+}
+
+// ---------- OWNER CREATE ----------
+function addQuestionField(prefill) {
+  const container = document.getElementById('oc-questions');
+  const idx = container.children.length + 1;
+  const div = document.createElement('div');
+  div.className = 'q-item';
+  div.innerHTML = `<label>Question ${idx}</label><input type="text" class="oc-q" placeholder="e.g. What was my first job?" value="${prefill || ''}" />`;
+  container.appendChild(div);
+}
+for (let i = 0; i < 10; i++) addQuestionField();
+
+async function createGame() {
+  const msg = document.getElementById('oc-msg');
+  msg.textContent = '';
+  const ownerName = document.getElementById('oc-name').value.trim();
+  const ownerPassword = document.getElementById('oc-pass').value;
+  const subjectName = document.getElementById('oc-subject-name').value.trim();
+  const questions = Array.from(document.querySelectorAll('.oc-q')).map(i => i.value.trim()).filter(Boolean);
+  if (!ownerName || !ownerPassword || !subjectName) {
+    msg.textContent = "Please fill in your name, password, and the guest of honor's name.";
+    msg.className = 'msg error';
+    return;
+  }
+  if (questions.length !== 10) {
+    msg.textContent = `You have ${questions.length} question(s) filled in — exactly 10 are needed.`;
+    msg.className = 'msg error';
+    return;
+  }
+  try {
+    const data = await api('create', { ownerName, ownerPassword, subjectName, questions });
+    state.gameCode = data.gameCode;
+    state.ownerPassword = ownerPassword;
+    document.getElementById('od-gamecode').textContent = data.gameCode;
+    document.getElementById('od-subjectpass').textContent = data.subjectPassword;
+    document.getElementById('od-title').textContent = `${ownerName}'s game`;
+    document.getElementById('od-status').textContent = `Give the game code to players, and the password above to ${subjectName}.`;
+    document.getElementById('od-status').className = 'msg ok';
+    state.ownerPhotos = [];
+    renderPhotoGrid();
+    showView('owner-dash');
+    refreshOwnerDash();
+  } catch (e) {
+    msg.textContent = e.message;
+    msg.className = 'msg error';
+  }
+}
+
+// ---------- OWNER LOGIN / DASHBOARD ----------
+async function ownerLogin() {
+  const msg = document.getElementById('ol-msg');
+  const gameCode = document.getElementById('ol-code').value.trim().toUpperCase();
+  const ownerPassword = document.getElementById('ol-pass').value;
+  try {
+    const data = await api('owner-login', { gameCode, ownerPassword });
+    state.gameCode = gameCode;
+    state.ownerPassword = ownerPassword;
+    document.getElementById('od-gamecode').textContent = gameCode;
+    document.getElementById('od-subjectpass').textContent = data.subjectPassword;
+    document.getElementById('od-title').textContent = `${data.ownerName || 'Host'}'s game`;
+    renderOwnerDash(data);
+    showView('owner-dash');
+  } catch (e) {
+    msg.textContent = e.message;
+    msg.className = 'msg error';
+  }
+}
+
+async function refreshOwnerDash() {
+  if (!state.gameCode || !state.ownerPassword) return;
+  try {
+    const data = await api('owner-login', { gameCode: state.gameCode, ownerPassword: state.ownerPassword });
+    renderOwnerDash(data);
+  } catch (e) {
+    document.getElementById('od-status').textContent = e.message;
+    document.getElementById('od-status').className = 'msg error';
+  }
+}
+
+function renderOwnerDash(data) {
+  const statusEl = document.getElementById('od-status');
+  if (data.status === 'awaiting_subject') {
+    statusEl.textContent = `Waiting for ${data.subjectName} to answer the 10 questions.`;
+    statusEl.className = 'msg';
+  } else {
+    statusEl.textContent = `${data.subjectName} has answered — players can join now!`;
+    statusEl.className = 'msg ok';
+  }
+  const board = document.getElementById('od-leaderboard');
+  if (!data.players || data.players.length === 0) {
+    board.innerHTML = '<p class="muted">No players yet.</p>';
+  } else {
+    board.innerHTML = data.players.map((p, i) => `
+      <div class="leaderboard-row">
+        <span><span class="rank">#${i + 1}</span>${p.playerName}</span>
+        <span>${p.score}/10 · ${(p.elapsedMs / 1000).toFixed(1)}s</span>
+      </div>
+    `).join('');
+  }
+
+  // Photos: only overwrite local editing state on first load, not every refresh,
+  // so the host doesn't lose in-progress edits when clicking "Refresh".
+  if (!state.ownerPhotos || state.ownerPhotos.length === 0) {
+    state.ownerPhotos = (data.photos || []).map(p => p.dataUrl);
+  }
+  renderPhotoGrid();
+  document.getElementById('od-slideshow-text').value = data.slideshowText || document.getElementById('od-slideshow-text').value || '';
+
+  // Testimonials
+  const tBox = document.getElementById('od-testimonials');
+  if (!data.testimonials || data.testimonials.length === 0) {
+    tBox.innerHTML = '<p class="muted">No notes yet.</p>';
+  } else {
+    tBox.innerHTML = data.testimonials.map(t => `
+      <div class="testimonial-item">
+        <div class="who">${t.playerName}</div>
+        <div>${t.note}</div>
+      </div>
+    `).join('');
+  }
+}
+
+function renderPhotoGrid() {
+  const grid = document.getElementById('od-photo-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < 5; i++) {
+    const slot = document.createElement('div');
+    slot.className = 'photo-slot';
+    const existing = state.ownerPhotos[i];
+    if (existing) {
+      slot.innerHTML = `<img src="${existing}" /><button type="button" class="remove" onclick="removePhoto(event, ${i})">&times;</button>`;
+    } else {
+      slot.innerHTML = `<span class="plus">+</span>`;
+      slot.onclick = () => document.getElementById('od-photo-input').click();
+    }
+    grid.appendChild(slot);
+  }
+}
+
+function removePhoto(evt, index) {
+  evt.stopPropagation();
+  state.ownerPhotos.splice(index, 1);
+  renderPhotoGrid();
+}
+
+document.getElementById('od-photo-input').addEventListener('change', async (e) => {
+  const files = Array.from(e.target.files || []);
+  const remainingSlots = 5 - state.ownerPhotos.length;
+  const toAdd = files.slice(0, Math.max(0, remainingSlots));
+  for (const file of toAdd) {
+    const dataUrl = await resizeImageToDataUrl(file, 800);
+    state.ownerPhotos.push(dataUrl);
+  }
+  renderPhotoGrid();
+  e.target.value = '';
+});
+
+function resizeImageToDataUrl(file, maxDim) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onload = () => {
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > height && width > maxDim) {
+          height = Math.round(height * (maxDim / width));
+          width = maxDim;
+        } else if (height > maxDim) {
+          width = Math.round(width * (maxDim / height));
+          height = maxDim;
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', 0.75));
+      };
+      img.onerror = reject;
+      img.src = reader.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function savePhotos() {
+  const msg = document.getElementById('od-photo-msg');
+  const slideshowText = document.getElementById('od-slideshow-text').value.trim();
+  try {
+    await api('set-photos', {
+      gameCode: state.gameCode,
+      ownerPassword: state.ownerPassword,
+      photos: state.ownerPhotos,
+      slideshowText,
+    });
+    msg.textContent = 'Saved!';
+    msg.className = 'msg ok';
+  } catch (e) {
+    msg.textContent = e.message;
+    msg.className = 'msg error';
+  }
+}
+
+// ---------- SUBJECT ----------
+async function subjectLogin() {
+  const msg = document.getElementById('sl-msg');
+  const gameCode = document.getElementById('sl-code').value.trim().toUpperCase();
+  const subjectPassword = document.getElementById('sl-pass').value;
+  try {
+    const data = await api('subject-check', { gameCode, subjectPassword });
+    if (data.alreadyAnswered) {
+      msg.textContent = 'These questions have already been answered. Ask your host if something needs to change.';
+      msg.className = 'msg error';
+      return;
+    }
+    state.gameCode = gameCode;
+    state.subjectPassword = subjectPassword;
+    state.subjectQuestions = data.questions;
+    const container = document.getElementById('sa-questions');
+    container.innerHTML = data.questions.map(q => `
+      <div class="q-item">
+        <div class="qnum">${q.id.replace('q', 'Question ')}</div>
+        <label>${q.text}</label>
+        <input type="text" class="sa-answer" data-qid="${q.id}" placeholder="Your answer" />
+      </div>
+    `).join('');
+    showView('subject-answer');
+  } catch (e) {
+    msg.textContent = e.message;
+    msg.className = 'msg error';
+  }
+}
+
+async function submitSubjectAnswers() {
+  const msg = document.getElementById('sa-msg');
+  const inputs = Array.from(document.querySelectorAll('.sa-answer'));
+  const answers = inputs.map(i => ({ id: i.dataset.qid, text: i.value.trim() }));
+  if (answers.some(a => !a.text)) {
+    msg.textContent = 'Please answer every question.';
+    msg.className = 'msg error';
+    return;
+  }
+  try {
+    await api('subject-submit', { gameCode: state.gameCode, subjectPassword: state.subjectPassword, answers });
+    document.getElementById('view-subject-answer').innerHTML = '<h2>Thanks!</h2><p>Your answers are locked in. Tell your host the game is ready for players.</p>';
+  } catch (e) {
+    msg.textContent = e.message;
+    msg.className = 'msg error';
+  }
+}
+
+// ---------- PLAYER ----------
+async function playerJoin() {
+  const msg = document.getElementById('pj-msg');
+  const gameCode = document.getElementById('pj-code').value.trim().toUpperCase();
+  const playerName = document.getElementById('pj-name').value.trim();
+  if (!playerName) {
+    msg.textContent = 'Enter a name.';
+    msg.className = 'msg error';
+    return;
+  }
+  try {
+    const data = await api('player-join', { gameCode, playerName });
+    state.gameCode = gameCode;
+    state.playerName = playerName;
+    state.playerQuestions = data.questions;
+    document.getElementById('pq-title').textContent = `How well do you know ${data.subjectName}?`;
+    const container = document.getElementById('pq-questions');
+    container.innerHTML = data.questions.map(q => `
+      <div class="q-item" data-qid="${q.id}">
+        <div class="qnum">${q.id.replace('q', 'Question ')}</div>
+        <label>${q.text}</label>
+        ${q.options.map(opt => `<button type="button" class="option" onclick="selectOption(this, '${q.id}')">${opt}</button>`).join('')}
+      </div>
+    `).join('');
+    state.quizStartTime = Date.now();
+    showView('player-quiz');
+  } catch (e) {
+    msg.textContent = e.message;
+    msg.className = 'msg error';
+  }
+}
+
+function selectOption(btn, qid) {
+  const group = document.querySelector(`.q-item[data-qid="${qid}"]`);
+  group.querySelectorAll('.option').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+async function submitPlayerAnswers() {
+  const msg = document.getElementById('pq-msg');
+  const groups = document.querySelectorAll('#pq-questions .q-item');
+  const answers = [];
+  for (const g of groups) {
+    const selected = g.querySelector('.option.selected');
+    if (!selected) {
+      msg.textContent = 'Please answer every question before submitting.';
+      msg.className = 'msg error';
+      return;
+    }
+    answers.push({ id: g.dataset.qid, choice: selected.textContent });
+  }
+  const elapsedMs = Date.now() - state.quizStartTime;
+  try {
+    const data = await api('player-submit', { gameCode: state.gameCode, playerName: state.playerName, answers, elapsedMs });
+    document.getElementById('pr-score').textContent = `You got ${data.score} out of ${data.total} right!`;
+    renderSlideshow(data.photos || [], data.slideshowText || '');
+    showView('player-result');
+    refreshPlayerLeaderboard();
+    if (data.isWinner) {
+      showWinnerPopup();
+    }
+  } catch (e) {
+    msg.textContent = e.message;
+    msg.className = 'msg error';
+  }
+}
+
+async function refreshPlayerLeaderboard() {
+  try {
+    const data = await api('leaderboard', { gameCode: state.gameCode });
+    const board = document.getElementById('pr-leaderboard');
+    board.innerHTML = data.players.map((p, i) => `
+      <div class="leaderboard-row">
+        <span><span class="rank">#${i + 1}</span>${p.playerName}</span>
+        <span>${p.score}/${data.total} · ${(p.elapsedMs / 1000).toFixed(1)}s</span>
+      </div>
+    `).join('');
+  } catch (e) {}
+}
+
+// ---------- SLIDESHOW ----------
+let slideshowTimer = null;
+function renderSlideshow(photos, caption) {
+  const wrap = document.getElementById('pr-slideshow-wrap');
+  if (!photos || photos.length === 0) {
+    wrap.innerHTML = '';
+    return;
+  }
+  let current = 0;
+  const dotsHtml = photos.map((_, i) => `<span class="dot${i === 0 ? ' active' : ''}"></span>`).join('');
+  wrap.innerHTML = `
+    <div class="slideshow">
+      <div class="dots">${dotsHtml}</div>
+      <img id="slideshow-img" src="${photos[0].dataUrl}" />
+      ${caption ? `<div class="caption">${caption}</div>` : ''}
+    </div>
+  `;
+  if (slideshowTimer) clearInterval(slideshowTimer);
+  if (photos.length > 1) {
+    slideshowTimer = setInterval(() => {
+      current = (current + 1) % photos.length;
+      const img = document.getElementById('slideshow-img');
+      if (img) img.src = photos[current].dataUrl;
+      const dots = wrap.querySelectorAll('.dot');
+      dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    }, 2500);
+  }
+}
+
+// ---------- WINNER POPUP ----------
+function showWinnerPopup() {
+  document.getElementById('winner-overlay').classList.remove('hidden');
+}
+function closeWinnerPopup() {
+  document.getElementById('winner-overlay').classList.add('hidden');
+}
+
+// ---------- TESTIMONIAL ----------
+async function submitTestimonial() {
+  const msg = document.getElementById('ty-msg');
+  const note = document.getElementById('ty-note').value.trim();
+  if (!note) {
+    msg.textContent = 'Write a quick note first.';
+    msg.className = 'msg error';
+    return;
+  }
+  try {
+    await api('submit-testimonial', { gameCode: state.gameCode, playerName: state.playerName || 'A guest', note });
+    msg.textContent = 'Thanks for the note!';
+    msg.className = 'msg ok';
+    document.getElementById('ty-note').value = '';
+  } catch (e) {
+    msg.textContent = e.message;
+    msg.className = 'msg error';
+  }
+}
+
+showView('role');
+</script>
+</body>
+</html>
