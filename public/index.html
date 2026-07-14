@@ -397,7 +397,7 @@ async function createGame() {
   const subjectName = document.getElementById('oc-subject-name').value.trim();
   const questions = Array.from(document.querySelectorAll('.oc-q')).map(i => i.value.trim()).filter(Boolean);
   if (!ownerName || !ownerPassword || !subjectName) {
-    msg.textContent = 'Please fill in your name, password, and the guest of honor\'s name.';
+    msg.textContent = "Please fill in your name, password, and the guest of honor's name.";
     msg.className = 'msg error';
     return;
   }
